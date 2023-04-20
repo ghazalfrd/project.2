@@ -1,28 +1,57 @@
 #include <iostream>
+
 using namespace std;
 
+const int MAX_STUDENTS = 100;
+const int MAX_GRADES = 10;
+
+struct Grade {
+    int units;
+    int grade;
+};
+
+struct Student {
+    Grade grades[MAX_GRADES];
+    int num_grades;
+    double avg;
+};
+
 int main() {
-    int numStudents;
+    
+    int num_students, num_grades;
     cout << "Enter the number of students: ";
-    cin >> numStudents;
-
-    int *studentIDs = new int[numStudents];
-    double *grades = new double[numStudents];
-
-    for (int i = 0; i < numStudents; i++) {
-        cout << "Enter student ID and grade for student " << i + 1 << ": ";
-        cin >> studentIDs[i] >> grades[i];
+    cin >> num_students;
+    cout << "Enter the number of grades per student: ";
+    cin >> num_grades;
+    
+    Student list[MAX_STUDENTS];
+    
+    for (int i = 0; i < num_students; i++) {
+        cout << "Enter the grades for student " << i+1 << ":" << endl;
+        list[i].num_grades = num_grades;
+        for (int j = 0; j < num_grades; j++) {
+            cout << "Grade " << j+1 << " units: ";
+            cin >> list[i].grades[j].units;
+            cout << "Grade " << j+1 << " grade: ";
+            cin >> list[i].grades[j].grade;
+        }
     }
-
-    double sum = 0;
-    for (int i = 0; i < numStudents; i++) {
-        sum += grades[i];
+    
+    
+    for (int i = 0; i < num_students; i++) {
+        int sum1 = 0, sum2 = 0;
+        for (int j = 0; j < list[i].num_grades; j++) {
+            if (list[i].grades[j].units == 0) break;
+            sum1 += list[i].grades[j].units * list[i].grades[j].grade;
+            sum2 += list[i].grades[j].units;
+        }
+        list[i].avg = (double)sum1 / sum2;
     }
-    double average = sum / numStudents;
-    cout << "The average grade is: " << average << endl;
-
-    delete[] studentIDs;
-    delete[] grades;
-
+    
+    
+    for (int i = 0; i < num_students; i++) {
+        cout << "Student " << i+1 << " average grade: " << list[i].avg << endl;
+    }
+    
     return 0;
 }
